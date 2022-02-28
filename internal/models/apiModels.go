@@ -28,6 +28,12 @@ type Order struct {
 	UserID int       `json:"user_id,omitempty"`
 }
 
+type AccrualOrder struct {
+	Id     int64  `json:"order,omitempty"`
+	Status string `json:"status,omitempty"`
+	Amount int64  `json:"accrual,omitempty"`
+}
+
 type Withdrawal struct {
 	Id     int64     `json:"order,omitempty"`
 	Amount int64     `json:"sum,omitempty"`
@@ -168,6 +174,34 @@ func (u *Order) UnmarshalJSON(data []byte) error {
 	u.Id = int64(s)
 	u.Amount = int64(nu.Amount * 100)
 	u.Date = nu.Date
+	u.Status = nu.Status
+
+	return nil
+}
+
+func (u *AccrualOrder) UnmarshalJSON(data []byte) error {
+	type newU struct {
+		Id     string `json:"order,omitempty"`
+		Status string `json:"status,omitempty"`
+		Amount int64  `json:"accrual,omitempty"`
+	}
+	nu := newU{}
+
+	if err := json.Unmarshal(data, &nu); err != nil {
+		return err
+	}
+
+	s, err := strconv.Atoi(nu.Id)
+	if err != nil {
+		return fmt.Errorf("order id is not valid")
+	}
+
+	if !luhn.Valid(int(s)) {
+		return fmt.Errorf("order id is not valid")
+	}
+
+	u.Id = int64(s)
+	u.Amount = int64(nu.Amount * 100)
 	u.Status = nu.Status
 
 	return nil

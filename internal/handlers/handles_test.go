@@ -391,5 +391,5 @@ func (db *fakeDB) SelectBalance(ctx context.Context, user int64) (*models.Balanc
 	return &db.selectBalance, nil
 }
 
-func (db *fakeDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, ch chan []models.Order) {
+func (db *fakeDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, ch chan []models.Order, ch2 chan models.Order) {
 }

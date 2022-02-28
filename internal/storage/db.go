@@ -30,7 +30,7 @@ type DBinterface interface {
 	SelectBalance(context.Context, int64) (*models.Balance, error)
 	SelectUserForOrder(context.Context, models.Order) (int64, error)
 	InsertOrder(context.Context, models.Order) error
-	SelectOrdersForUpdate(context.Context, *config.Config, chan []models.Order)
+	SelectOrdersForUpdate(context.Context, *config.Config, chan []models.Order, chan models.Order)
 	SelectAllOrders(context.Context, int64) ([]*models.Order, error)
 	SelectAllWithdrawals(context.Context, int64) (*[]models.Withdrawal, error)
 }
@@ -140,8 +140,8 @@ func (db *PGDB) SelectUserForOrder(ctx context.Context, order models.Order) (int
 }
 
 func (db *PGDB) doAsTransaction(ctx context.Context, fu ...func(pgx.Tx) error) error {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
+	/*ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()*/
 	tx, err := db.Conn.Begin(ctx)
 	if err != nil {
 		return fmt.Errorf("starting connection failed: %v", err)
@@ -240,13 +240,13 @@ func (db *PGDB) SelectAllWithdrawals(ctx context.Context, u int64) (*[]models.Wi
 	return &listOrders, nil
 }
 
-func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, listOrdersChan chan []models.Order) {
+func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, oin chan []models.Order, oout chan models.Order) {
 	var listOrders []models.Order
 	err := db.doAsTransaction(ctx,
 		func(tx pgx.Tx) error {
 
 			row, err := tx.Query(context.Background(), `SELECT order_id, status FROM bonuses 
-										WHERE status not in ('PROCESSED', 'INVALID') LIMIT $1 FOR UPDATE`, cfg.RowsToUpdate)
+										WHERE status not in ('PROCESSED', 'INVALID') LIMIT $1 FOR UPDATE SKIP LOCKED`, cfg.RowsToUpdate)
 			if err != nil {
 				return fmt.Errorf("init select from bonuses failed: %v", err)
 			}
@@ -260,35 +260,43 @@ func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, l
 				}
 				listOrders = append(listOrders, o)
 			}
-			listOrdersChan <- listOrders
+			oin <- listOrders
 			return nil
 		},
 		func(tx pgx.Tx) error {
-			listOrders = <-listOrdersChan
-			_, err := tx.Prepare(ctx, "update bonuses", `UPDATE bonuses SET amount=$1, status=$2 where bonus_id=$3;`)
+			_, err := tx.Prepare(ctx, "update bonuses", `UPDATE bonuses SET change=$1, status=$2 where order_id=$3;`)
 
 			if err != nil {
 				return fmt.Errorf("init update users failed: %v", err)
 			}
-			for _, bonus := range listOrders {
-				if _, err = tx.Exec(ctx, "update amount", bonus.Amount, bonus.Status, bonus.Id); err != nil {
-					return fmt.Errorf("update amount failed: %v", err)
-				}
-			}
-			return nil
-		},
-		func(tx pgx.Tx) error {
-			_, err := tx.Prepare(ctx, "update amount", `UPDATE users SET balance=balance+$1 where user_id=$2;`)
+
+			_, err = tx.Prepare(ctx, "update user amount", `UPDATE users SET balance=balance+$1 where id=$2;`)
 
 			if err != nil {
 				return fmt.Errorf("init update users failed: %v", err)
 			}
-			for _, bonus := range listOrders {
-				if _, err = tx.Exec(ctx, "update amount", bonus.Amount, bonus.UserID); err != nil {
-					return fmt.Errorf("update amount failed: %v", err)
+
+			for {
+			insertUpdates:
+				select {
+				case bonus, ok := <-oout:
+					if !ok {
+						break insertUpdates
+					}
+					if _, err = tx.Exec(ctx, "update user amount", bonus.Amount, bonus.UserID); err != nil {
+						return fmt.Errorf("update user amount failed: %v", err)
+					}
+
+					if _, err = tx.Exec(ctx, "update bonuses", bonus.Amount, bonus.Status, bonus.Id); err != nil {
+						return fmt.Errorf("update amount failed: %v", err)
+					}
+
+				case <-ctx.Done():
+					db.log.Info("context canceled")
+					return nil
 				}
+				return nil
 			}
-			return nil
 		})
 
 	if err != nil {

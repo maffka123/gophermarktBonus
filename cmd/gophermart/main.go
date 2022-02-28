@@ -5,6 +5,7 @@ import (
 
 	"context"
 	"fmt"
+	"github.com/maffka123/gophermarktBonus/internal/app"
 	"github.com/maffka123/gophermarktBonus/internal/config"
 	"github.com/maffka123/gophermarktBonus/internal/handlers"
 	"github.com/maffka123/gophermarktBonus/internal/storage"
@@ -13,6 +14,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -52,6 +54,9 @@ func main() {
 			logger.Error("HTTP server Shutdown:", zap.Error(err))
 		}
 	}()
+
+	statusTicker := time.NewTicker(time.Duration(30) * time.Second)
+	go app.UpdateStatus(ctx, statusTicker.C, logger, db, cfg)
 
 	logger.Info("Start serving on", zap.String("endpoint name", cfg.Endpoint))
 	log.Fatal(srv.ListenAndServe())

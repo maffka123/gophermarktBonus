@@ -21,27 +21,35 @@ GET /api/user/balance/withdrawals — all withdrawals
 
 ## Testing with cURL
 
- `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/user/register`
+ `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/register`
 
-  `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/user/login`
+  `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
 
-   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 18 -X POST http://localhost:8080/api/user/orders`
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 18 -X POST http://localhost:8081/api/user/orders`
 
-   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8080/api/user/orders`
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8081/api/user/orders`
 
-`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8080/api/user/balance`
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8081/api/user/balance`
 
-`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":0.5}' -X POST http://localhost:8080/api/user/balance/withdraw`
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":0.5}' -X POST http://localhost:8081/api/user/balance/withdraw`
 
-`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":10}' -X POST http://localhost:8080/api/user/balance/withdraw`
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":10}' -X POST http://localhost:8081/api/user/balance/withdraw`
 
-`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -X GET http://localhost:8080/api/user/balance/withdrawals`
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -X GET http://localhost:8081/api/user/balance/withdrawals`
 
 
- `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/user/register`
+ `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/register`
 
-   `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/user/login`
+   `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
 
-   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U"  -X GET http://localhost:8080/api/user/orders`
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U"  -X GET http://localhost:8081/api/user/orders`
 
-   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -X GET http://localhost:8080/api/user/balance/withdrawals`
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -X GET http://localhost:8081/api/user/balance/withdrawals`
+
+
+
+ `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456758 -X POST http://localhost:8081/api/user/orders`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456766 -X POST http://localhost:8081/api/user/orders`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456774 -X POST http://localhost:8081/api/user/orders`
