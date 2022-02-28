@@ -91,7 +91,7 @@ func (u *User) UnmarshalJSON(data []byte) error {
 
 func (w *Withdrawal) UnmarshalJSON(data []byte) error {
 	type newU struct {
-		Id     string  `json:"order,omitempty"`
+		ID     string  `json:"order,omitempty"`
 		Amount float64 `json:"sum,omitempty"`
 	}
 	nu := newU{}
@@ -100,7 +100,7 @@ func (w *Withdrawal) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	s, err := strconv.Atoi(nu.Id)
+	s, err := strconv.Atoi(nu.ID)
 	if err != nil {
 		return fmt.Errorf("order amount is not valid")
 	}
@@ -117,7 +117,7 @@ func (w *Withdrawal) UnmarshalJSON(data []byte) error {
 
 func (w *Withdrawal) MarshalJSON() ([]byte, error) {
 	type newWithdrawal struct {
-		Id     string  `json:"order,omitempty"`
+		ID     string  `json:"order,omitempty"`
 		Amount float64 `json:"sum,omitempty"`
 		Date   string  `json:"processed_at,omitempty"`
 	}
@@ -125,7 +125,7 @@ func (w *Withdrawal) MarshalJSON() ([]byte, error) {
 	nb := newWithdrawal{
 		Amount: math.Abs(float64(w.Amount)) / 100,
 		Date:   w.Date.Format(time.RFC3339),
-		Id:     fmt.Sprint(w.ID),
+		ID:     fmt.Sprint(w.ID),
 	}
 
 	return json.Marshal(nb)
@@ -133,7 +133,7 @@ func (w *Withdrawal) MarshalJSON() ([]byte, error) {
 
 func (o *Order) MarshalJSON() ([]byte, error) {
 	type newOrder struct {
-		Id     string  `json:"number,omitempty"`
+		ID     string  `json:"number,omitempty"`
 		Status string  `json:"status"`
 		Amount float64 `json:"accrual"`
 		Date   string  `json:"uploaded_at,omitempty"`
@@ -142,7 +142,7 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 	nb := newOrder{
 		Amount: math.Abs(float64(o.Amount)) / 100,
 		Date:   o.Date.Format(time.RFC3339),
-		Id:     fmt.Sprint(o.ID),
+		ID:     fmt.Sprint(o.ID),
 		Status: o.Status,
 	}
 
@@ -151,7 +151,7 @@ func (o *Order) MarshalJSON() ([]byte, error) {
 
 func (o *Order) UnmarshalJSON(data []byte) error {
 	type newU struct {
-		Id     string    `json:"number,omitempty"`
+		ID     string    `json:"number,omitempty"`
 		Status string    `json:"status"`
 		Amount float64   `json:"accrual"`
 		Date   time.Time `json:"uploaded_at,omitempty"`
@@ -162,7 +162,7 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	s, err := strconv.Atoi(nu.Id)
+	s, err := strconv.Atoi(nu.ID)
 	if err != nil {
 		return fmt.Errorf("order id is not valid")
 	}
@@ -181,7 +181,7 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 
 func (u *AccrualOrder) UnmarshalJSON(data []byte) error {
 	type newU struct {
-		Id     string `json:"order,omitempty"`
+		ID     string `json:"order,omitempty"`
 		Status string `json:"status,omitempty"`
 		Amount int64  `json:"accrual,omitempty"`
 	}
@@ -191,7 +191,7 @@ func (u *AccrualOrder) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	s, err := strconv.Atoi(nu.Id)
+	s, err := strconv.Atoi(nu.ID)
 	if err != nil {
 		return fmt.Errorf("order id is not valid")
 	}

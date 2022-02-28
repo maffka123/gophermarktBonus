@@ -18,6 +18,7 @@ import (
 )
 
 func main() {
+	fmt.Print("starting...")
 	cfg, err := config.InitConfig()
 	if err != nil {
 		log.Fatalf("can't load config: %v", err)
