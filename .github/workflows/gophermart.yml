@@ -49,7 +49,7 @@ jobs:
         run: |
           (cd cmd/gophermart && go build -o gophermart)
           (cd cmd/accrual && chmod +x accrual_linux_amd64)
-          (ls -al)
+          (ls -al cmd/gophermart)
 
       - name: Test
         run: |
