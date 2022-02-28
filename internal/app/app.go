@@ -61,7 +61,7 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 	orders := <-oin
 
 	for _, order := range orders {
-		url += fmt.Sprint(order.Id)
+		url += fmt.Sprint(order.ID)
 		request, err := http.NewRequest(http.MethodGet, url, nil)
 
 		if err != nil {
@@ -77,7 +77,7 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 		decoder := json.NewDecoder(response.Body)
 		decoder.Decode(&intermOrder)
 
-		oout <- models.Order{Id: intermOrder.Id, Amount: intermOrder.Amount, Status: intermOrder.Status}
+		oout <- models.Order{ID: intermOrder.ID, Amount: intermOrder.Amount, Status: intermOrder.Status}
 
 	}
 	close(oout)

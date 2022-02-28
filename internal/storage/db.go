@@ -99,7 +99,7 @@ func (db *PGDB) SelectPass(ctx context.Context, user *models.User) (*string, err
 	defer cancel()
 	var val string
 	row := db.Conn.QueryRow(ctx, "SELECT password, id FROM users WHERE login=$1", user.Login)
-	err := row.Scan(&val, &user.Id)
+	err := row.Scan(&val, &user.ID)
 
 	if err != nil {
 		return nil, fmt.Errorf("select from users failed: %v", err)
@@ -126,7 +126,7 @@ func (db *PGDB) SelectUserForOrder(ctx context.Context, order models.Order) (int
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	var val int64
-	row := db.Conn.QueryRow(ctx, "SELECT users.id FROM users JOIN bonuses ON users.id=bonuses.user_id WHERE order_id=$1", order.Id)
+	row := db.Conn.QueryRow(ctx, "SELECT users.id FROM users JOIN bonuses ON users.id=bonuses.user_id WHERE order_id=$1", order.ID)
 	err := row.Scan(&val)
 
 	if err == pgx.ErrNoRows {
@@ -171,7 +171,7 @@ func (db *PGDB) InsertOrder(ctx context.Context, order models.Order) error {
 				return fmt.Errorf("init bonuses insert failed: %v", err)
 			}
 
-			if _, err = tx.Exec(ctx, "insert bonuses", order.UserID, order.Id, order.Amount, order.Type, order.Status); err != nil {
+			if _, err = tx.Exec(ctx, "insert bonuses", order.UserID, order.ID, order.Amount, order.Type, order.Status); err != nil {
 				return fmt.Errorf("update bonuses failed: %v", err)
 			}
 			return nil
@@ -208,7 +208,7 @@ func (db *PGDB) SelectAllOrders(ctx context.Context, u int64) ([]*models.Order, 
 
 	for row.Next() {
 		var o models.Order
-		err := row.Scan(&o.Id, &o.Status, &o.Amount, &o.Date)
+		err := row.Scan(&o.ID, &o.Status, &o.Amount, &o.Date)
 		if err != nil {
 			db.log.Error("select orders failed:", zap.Error(err))
 		}
@@ -230,7 +230,7 @@ func (db *PGDB) SelectAllWithdrawals(ctx context.Context, u int64) (*[]models.Wi
 
 	for row.Next() {
 		var o models.Withdrawal
-		err := row.Scan(&o.Id, &o.Amount, &o.Date)
+		err := row.Scan(&o.ID, &o.Amount, &o.Date)
 		if err != nil {
 			db.log.Error("select orders failed:", zap.Error(err))
 		}
@@ -254,7 +254,7 @@ func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, o
 
 			for row.Next() {
 				var o models.Order
-				err := row.Scan(&o.Id, &o.Status)
+				err := row.Scan(&o.ID, &o.Status)
 				if err != nil {
 					return fmt.Errorf("select bonuses for update failed: %v", err)
 				}
@@ -287,7 +287,7 @@ func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, o
 						return fmt.Errorf("update user amount failed: %v", err)
 					}
 
-					if _, err = tx.Exec(ctx, "update bonuses", bonus.Amount, bonus.Status, bonus.Id); err != nil {
+					if _, err = tx.Exec(ctx, "update bonuses", bonus.Amount, bonus.Status, bonus.ID); err != nil {
 						return fmt.Errorf("update amount failed: %v", err)
 					}
 

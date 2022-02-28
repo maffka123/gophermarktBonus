@@ -81,7 +81,7 @@ func (h *Handler) HandlerPostLogin(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc 
 			return
 		}
 
-		_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": u.Id})
+		_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": u.ID})
 
 		h.logger.Debug("logged in: ", zap.String("login", u.Login))
 		http.SetCookie(w, &http.Cookie{
@@ -104,7 +104,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("400 - could not parse order id: %s", err), http.StatusBadRequest)
 			return
 		}
-		valid, order.Id, err = app.PrepOrderNumber(h.ctx, orderID)
+		valid, order.ID, err = app.PrepOrderNumber(h.ctx, orderID)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("400 - could not parse order id: %s", err), http.StatusBadRequest)
 			return
@@ -253,7 +253,7 @@ func (h *Handler) HandlerPostWithdraw() http.HandlerFunc {
 			return
 		}
 
-		order := models.Order{Id: o.Id, Amount: -o.Amount, UserID: int(currUser), Status: "PROCESSED", Type: "withdraw"}
+		order := models.Order{ID: o.ID, Amount: -o.Amount, UserID: int(currUser), Status: "PROCESSED", Type: "withdraw"}
 		err = h.db.InsertOrder(h.ctx, order)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("500 - internal server error: %s", err), http.StatusBadRequest)

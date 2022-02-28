@@ -197,8 +197,8 @@ func TestHandler_HandlerGetOrders(t *testing.T) {
 		{name: "get_orders",
 			request: request{route: "/api/user/orders"},
 			want:    want{statusCode: 200},
-			db: fakeDB{selectAllOrders: []*models.Order{{Amount: 50, Id: 18, Status: "PROCESSING", Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)},
-				{Amount: 150, Id: 182, Status: "PROCESSED", Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)}}},
+			db: fakeDB{selectAllOrders: []*models.Order{{Amount: 50, ID: 18, Status: "PROCESSING", Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)},
+				{Amount: 150, ID: 182, Status: "PROCESSED", Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)}}},
 		},
 	}
 	for _, tt := range tests {
@@ -297,21 +297,21 @@ func TestHandler_HandlerPostWithdraw(t *testing.T) {
 			request: request{route: "/api/user/balance/withdraw"},
 			want:    want{statusCode: 402},
 			db: fakeDB{selectBalance: models.Balance{Current: 100},
-				selectAllWithdrawals: []models.Withdrawal{{Amount: 50, Id: 18, Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)},
-					{Amount: 500, Id: 182, Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)}}},
-			withdraw: models.Withdrawal{Id: 18, Amount: 500},
+				selectAllWithdrawals: []models.Withdrawal{{Amount: 50, ID: 18, Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)},
+					{Amount: 500, ID: 182, Date: time.Date(2021, time.Month(2), 21, 1, 10, 30, 0, time.UTC)}}},
+			withdraw: models.Withdrawal{ID: 18, Amount: 500},
 		},
 		{name: "withdraw_success",
 			request:  request{route: "/api/user/balance/withdraw"},
 			want:     want{statusCode: 200},
 			db:       fakeDB{selectBalance: models.Balance{Current: 10000}},
-			withdraw: models.Withdrawal{Id: 18, Amount: 50},
+			withdraw: models.Withdrawal{ID: 18, Amount: 50},
 		},
 		{name: "order_number_wrong",
 			request:  request{route: "/api/user/balance/withdraw"},
 			want:     want{statusCode: 422},
 			db:       fakeDB{},
-			withdraw: models.Withdrawal{Id: 799273987131, Amount: 50},
+			withdraw: models.Withdrawal{ID: 799273987131, Amount: 50},
 		},
 	}
 	for _, tt := range tests {
@@ -368,7 +368,7 @@ func (db *fakeDB) SelectPass(ctx context.Context, user *models.User) (*string, e
 	}
 	np := sha256.Sum256([]byte("pass"))
 	npb := hex.EncodeToString(np[:])
-	user.Id = 11
+	user.ID = 11
 	return &npb, nil
 }
 
