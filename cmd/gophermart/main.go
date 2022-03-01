@@ -29,14 +29,13 @@ func main() {
 	}
 	fmt.Println(cfg)
 
-	_, err = config.InitLogger(cfg.Debug, cfg.AppName)
+	logger, err := config.InitLogger(cfg.Debug, cfg.AppName)
 	if err != nil {
 		log.Fatalf("can't initialize zap logger: %v", err)
 	}
-	fmt.Println("logger ready")
-	/*
-		logger.Info("initializing the service...")
 
+	logger.Info("initializing the service...")
+	/*
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
