@@ -8,7 +8,6 @@ import (
 	"github.com/maffka123/gophermarktBonus/internal/models"
 	"github.com/maffka123/gophermarktBonus/internal/storage"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -50,12 +49,11 @@ func (w *Worker) UpdateStatus(t <-chan time.Time) {
 // sending data furter to pg
 func (w *Worker) getAccrual(oin chan []models.Order, oout chan models.Order, client *http.Client) {
 	url := fmt.Sprintf("%s/api/orders/", w.cfg.AccrualSystem)
-	var intermOrder models.AccrualOrder
 	orders := <-oin
 
 	for _, order := range orders {
+		var intermOrder models.AccrualOrder
 		url += fmt.Sprint(order.ID)
-		w.logger.Debug("Accural URL: " + url)
 		request, err := http.NewRequest(http.MethodGet, url, nil)
 
 		if err != nil {
@@ -70,10 +68,10 @@ func (w *Worker) getAccrual(oin chan []models.Order, oout chan models.Order, cli
 		defer response.Body.Close()
 
 		decoder := json.NewDecoder(response.Body)
-		decoder.Decode(&intermOrder)
-		responseData, _ := ioutil.ReadAll(response.Body)
-		w.logger.Debug(fmt.Sprint(response.Header))
-		w.logger.Debug("answer from accural" + fmt.Sprint(responseData))
+		err = decoder.Decode(&intermOrder)
+		if requestErr != nil {
+			w.logger.Debug("Error processing response" + err.Error())
+		}
 
 		oout <- models.Order{ID: intermOrder.ID, Amount: intermOrder.Amount, Status: intermOrder.Status}
 

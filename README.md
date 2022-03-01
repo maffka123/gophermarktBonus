@@ -55,3 +55,7 @@ GET /api/user/balance/withdrawals — all withdrawals
   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456766 -X POST http://localhost:8081/api/user/orders`
 
   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456774 -X POST http://localhost:8081/api/user/orders`
+
+
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 162124202183 -X POST http://localhost:8081/api/user/orders`
