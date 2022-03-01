@@ -51,8 +51,10 @@ func (b *Balance) MarshalJSON() ([]byte, error) {
 		Withdrawn float64 `json:"withdrawn"`
 	}
 
-	nb := newBalance{Current: float64(b.Current) / 100,
-		Withdrawn: float64(b.Withdrawn) / 100}
+	nb := newBalance{
+		Current:   float64(b.Current) / 100,
+		Withdrawn: math.Abs(float64(b.Withdrawn)) / 100,
+	}
 
 	return json.Marshal(nb)
 }
