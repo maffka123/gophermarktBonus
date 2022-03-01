@@ -41,6 +41,7 @@ type PGDB struct {
 	log  *zap.Logger
 }
 
+// InitDB initialized pg connection and creates tables
 func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp string) (*PGDB, error) {
 	db := PGDB{
 		path: cfg.DBpath,
@@ -80,6 +81,7 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp stri
 	return &db, nil
 }
 
+// CreateNewUser insertes new user, handles not unique users
 func (db *PGDB) CreateNewUser(ctx context.Context, user *models.User) (int, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -94,6 +96,7 @@ func (db *PGDB) CreateNewUser(ctx context.Context, user *models.User) (int, erro
 	return 1, nil
 }
 
+// SelectPass gets hashed password for a particular user
 func (db *PGDB) SelectPass(ctx context.Context, user *models.User) (*string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -108,6 +111,7 @@ func (db *PGDB) SelectPass(ctx context.Context, user *models.User) (*string, err
 	return &val, nil
 }
 
+// SelectBalance gets sum of all bonuses and sum of all withdrawals for a user
 func (db *PGDB) SelectBalance(ctx context.Context, user int64) (*models.Balance, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -122,6 +126,7 @@ func (db *PGDB) SelectBalance(ctx context.Context, user int64) (*models.Balance,
 	return &val, nil
 }
 
+// SelectUserForOrder tries to find if some order id was already used and if yes by which user
 func (db *PGDB) SelectUserForOrder(ctx context.Context, order models.Order) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -139,6 +144,7 @@ func (db *PGDB) SelectUserForOrder(ctx context.Context, order models.Order) (int
 	return val, nil
 }
 
+// doAsTransaction allow run sql statements inside one transaction
 func (db *PGDB) doAsTransaction(ctx context.Context, fu ...func(pgx.Tx) error) error {
 	/*ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()*/
@@ -162,6 +168,7 @@ func (db *PGDB) doAsTransaction(ctx context.Context, fu ...func(pgx.Tx) error) e
 	return nil
 }
 
+// InsertOrder appends new order to existing bonuses
 func (db *PGDB) InsertOrder(ctx context.Context, order models.Order) error {
 	err := db.doAsTransaction(ctx,
 		func(tx pgx.Tx) error {
@@ -196,6 +203,7 @@ func (db *PGDB) InsertOrder(ctx context.Context, order models.Order) error {
 	return nil
 }
 
+// SelectAllOrders gets all orders for particular user
 func (db *PGDB) SelectAllOrders(ctx context.Context, u int64) ([]*models.Order, error) {
 	var listOrders []*models.Order
 
@@ -218,6 +226,7 @@ func (db *PGDB) SelectAllOrders(ctx context.Context, u int64) ([]*models.Order, 
 	return listOrders, nil
 }
 
+// SelectAllWithdrawals gets all withdrwals for particular user
 func (db *PGDB) SelectAllWithdrawals(ctx context.Context, u int64) (*[]models.Withdrawal, error) {
 	var listOrders []models.Withdrawal
 
@@ -240,6 +249,10 @@ func (db *PGDB) SelectAllWithdrawals(ctx context.Context, u int64) (*[]models.Wi
 	return &listOrders, nil
 }
 
+// SelectOrdersForUpdate gets orders which are not yet finished and leaves transaction open
+// until updated order comes back
+// oin channel sends all selected orders to update system
+// oout channel recieves updated orders and allows update table as a stream
 func (db *PGDB) SelectOrdersForUpdate(ctx context.Context, cfg *config.Config, oin chan []models.Order, oout chan models.Order) {
 	var listOrders []models.Order
 	err := db.doAsTransaction(ctx,

@@ -31,6 +31,7 @@ func NewHandler(ctx context.Context, db storage.DBinterface, logger *zap.Logger)
 	}
 }
 
+// HandlerPostRegister creates new user if user with such login not yet exist
 func (h *Handler) HandlerPostRegister(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
@@ -66,6 +67,7 @@ func (h *Handler) HandlerPostRegister(tokenAuth *jwtauth.JWTAuth) http.HandlerFu
 	}
 }
 
+// HandlerPostLogin logins user if login and password are valid
 func (h *Handler) HandlerPostLogin(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
@@ -102,6 +104,7 @@ func (h *Handler) HandlerPostLogin(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc 
 	}
 }
 
+// HandlerPostOrders adds new order if order number is valid and does not yet exist
 func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var valid bool
@@ -165,6 +168,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 	}
 }
 
+// HandlerGetOrders gets list of all orders
 func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -201,6 +205,7 @@ func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 	}
 }
 
+// HandlerGetBalance get current balance and sum all withdrawals
 func (h *Handler) HandlerGetBalance() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -231,6 +236,7 @@ func (h *Handler) HandlerGetBalance() http.HandlerFunc {
 	}
 }
 
+// HandlerPostWithdraw adds an order with minus balance
 func (h *Handler) HandlerPostWithdraw() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
@@ -280,6 +286,7 @@ func (h *Handler) HandlerPostWithdraw() http.HandlerFunc {
 	}
 }
 
+// HandlerGetWithdrawals returns a list of all withwdrawals
 func (h *Handler) HandlerGetWithdrawals() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 

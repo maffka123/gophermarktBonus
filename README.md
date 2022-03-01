@@ -33,7 +33,7 @@ GET /api/user/balance/withdrawals — all withdrawals
 
 `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":0.5}' -X POST http://localhost:8081/api/user/balance/withdraw`
 
-`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":10}' -X POST http://localhost:8081/api/user/balance/withdraw`
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":10000}' -X POST http://localhost:8081/api/user/balance/withdraw`
 
 `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -X GET http://localhost:8081/api/user/balance/withdrawals`
 
