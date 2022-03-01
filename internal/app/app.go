@@ -83,6 +83,7 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 
 		decoder := json.NewDecoder(response.Body)
 		decoder.Decode(&intermOrder)
+		logger.Debug(fmt.Sprint(intermOrder))
 
 		oout <- models.Order{ID: intermOrder.ID, Amount: intermOrder.Amount, Status: intermOrder.Status}
 
