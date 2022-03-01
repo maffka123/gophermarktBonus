@@ -5,6 +5,7 @@ import (
 
 
 	"fmt"
+
 	"github.com/maffka123/gophermarktBonus/internal/app"
 
 	"github.com/maffka123/gophermarktBonus/internal/handlers"
@@ -17,6 +18,7 @@ import (
 	"time"*/
 	"context"
 	"fmt"
+	"github.com/maffka123/gophermarktBonus/internal/app"
 	"github.com/maffka123/gophermarktBonus/internal/config"
 	"github.com/maffka123/gophermarktBonus/internal/storage"
 	"go.uber.org/zap"
@@ -30,7 +32,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("can't load config: %v", err)
 	}
-	fmt.Println(cfg)
 
 	logger, err := config.InitLogger(cfg.Debug, cfg.AppName)
 	if err != nil {
@@ -42,7 +43,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	_, err = storage.InitDB(ctx, cfg, logger)
+	bp := app.GetBasePath()
+	logger.Info(bp)
+	_, err = storage.InitDB(ctx, cfg, logger, bp)
 	if err != nil {
 		logger.Info("Error initializing db", zap.Error(err))
 	}
