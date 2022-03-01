@@ -15,6 +15,7 @@ import (
 	"github.com/maffka123/gophermarktBonus/internal/storage"
 	"github.com/theplant/luhn"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"path"
 	"runtime"
 )
@@ -83,7 +84,9 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 
 		decoder := json.NewDecoder(response.Body)
 		decoder.Decode(&intermOrder)
-		logger.Debug(fmt.Sprint(intermOrder))
+		responseData, _ := ioutil.ReadAll(response.Body)
+		logger.Debug(response.Status)
+		logger.Debug("answer from accural" + fmt.Sprint(responseData))
 
 		oout <- models.Order{ID: intermOrder.ID, Amount: intermOrder.Amount, Status: intermOrder.Status}
 
