@@ -195,7 +195,7 @@ func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 		}
 
 		h.logger.Debug("list of orders for user: ", zap.String("login", fmt.Sprint(currUser)))
-		w.Header().Set("application-type", "application/json")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(mJSON))
 	}
@@ -309,7 +309,7 @@ func (h *Handler) HandlerGetWithdrawals() http.HandlerFunc {
 		}
 
 		h.logger.Debug("list of orders for user: ", zap.String("login", fmt.Sprint(currUser)))
-		w.Header().Set("application-type", "application/json")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(mJSON))
 	}
