@@ -25,7 +25,7 @@ type Order struct {
 	Amount int64     `json:"accrual,omitempty"`
 	Date   time.Time `json:"uploaded_at,omitempty"`
 	Type   string    `json:"type,omitempty"`
-	UserID int       `json:"user_id,omitempty"`
+	UserID int64     `json:"user_id,omitempty"`
 }
 
 type AccrualOrder struct {

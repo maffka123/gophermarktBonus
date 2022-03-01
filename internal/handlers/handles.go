@@ -147,7 +147,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			return
 		}
 
-		order.UserID = int(currUser)
+		order.UserID = currUser
 		order.Status = "NEW"
 		order.Type = "top_up"
 
@@ -264,7 +264,7 @@ func (h *Handler) HandlerPostWithdraw() http.HandlerFunc {
 			return
 		}
 
-		order := models.Order{ID: o.ID, Amount: -o.Amount, UserID: int(currUser), Status: "PROCESSED", Type: "withdraw"}
+		order := models.Order{ID: o.ID, Amount: -o.Amount, UserID: currUser, Status: "PROCESSED", Type: "withdraw"}
 		err = h.db.InsertOrder(h.ctx, order)
 		if err != nil {
 			http.Error(w, fmt.Sprintf("500 - internal server error: %s", err), http.StatusBadRequest)
