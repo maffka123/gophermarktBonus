@@ -139,7 +139,6 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			w.Write([]byte(`{"status":"ok}`))
 			return
 		} else if expectedUser != 0 && currUser != expectedUser {
-			h.logger.Debug(err.Error())
 			http.Error(w, fmt.Sprintf("409 - Order was used by diferent user: %s", err), http.StatusConflict)
 			return
 		} else if err != nil {
@@ -173,7 +172,7 @@ func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 
 		currUser, err := app.UserIDFromContext(r.Context())
 		if err != nil {
-			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("401 - could not parse user id from token: %s", err), http.StatusUnauthorized)
 			return
 		}
 
@@ -208,7 +207,7 @@ func (h *Handler) HandlerGetBalance() http.HandlerFunc {
 
 		currUser, err := app.UserIDFromContext(r.Context())
 		if err != nil {
-			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("401 - could not parse user id from token: %s", err), http.StatusUnauthorized)
 			return
 		}
 
@@ -225,7 +224,7 @@ func (h *Handler) HandlerGetBalance() http.HandlerFunc {
 		}
 
 		h.logger.Debug("balance for user: ", zap.String("login", fmt.Sprint(currUser)))
-		w.Header().Set("application-type", "application/json")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(mJSON))
 	}
@@ -238,7 +237,7 @@ func (h *Handler) HandlerPostWithdraw() http.HandlerFunc {
 
 		currUser, err := app.UserIDFromContext(r.Context())
 		if err != nil {
-			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("401 - could not parse user id from token: %s", err), http.StatusUnauthorized)
 			return
 		}
 
@@ -287,7 +286,7 @@ func (h *Handler) HandlerGetWithdrawals() http.HandlerFunc {
 
 		currUser, err := app.UserIDFromContext(r.Context())
 		if err != nil {
-			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
+			http.Error(w, fmt.Sprintf("401 - could not parse user id from token: %s", err), http.StatusUnauthorized)
 			return
 		}
 

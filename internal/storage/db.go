@@ -6,7 +6,6 @@ import (
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/lib/pq"
 	"github.com/maffka123/gophermarktBonus/internal/config"
 	"github.com/maffka123/gophermarktBonus/internal/models"
 	"go.uber.org/zap"
@@ -86,8 +85,8 @@ func (db *PGDB) CreateNewUser(ctx context.Context, user *models.User) (int, erro
 	defer cancel()
 	err := db.Conn.QueryRow(ctx, `INSERT INTO users (login, password) VALUES($1,$2) RETURNING id;`, user.Login, user.Password).Scan(&user.ID)
 
-	if pgerr, ok := err.(*pq.Error); ok {
-		return -1, fmt.Errorf("user already exists: %v", pgerr)
+	if err != nil && strings.Contains(err.Error(), "violates") {
+		return -1, fmt.Errorf("user already exists: %v", err)
 	} else if err != nil {
 		return 0, fmt.Errorf("insert new user failed: %v", err)
 	}

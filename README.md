@@ -42,6 +42,8 @@ GET /api/user/balance/withdrawals — all withdrawals
 
    `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
 
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -H "Content-Type: text/plain" -d 18 -X POST http://localhost:8081/api/user/orders`
+
    `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U"  -X GET http://localhost:8081/api/user/orders`
 
    `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -X GET http://localhost:8081/api/user/balance/withdrawals`
