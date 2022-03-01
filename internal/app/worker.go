@@ -69,7 +69,7 @@ func (w *Worker) getAccrual(oin chan []models.Order, oout chan models.Order, cli
 
 		decoder := json.NewDecoder(response.Body)
 		err = decoder.Decode(&intermOrder)
-		if requestErr != nil {
+		if err != nil {
 			w.logger.Debug("Error processing response" + err.Error())
 		}
 
