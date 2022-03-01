@@ -3,20 +3,23 @@ package main
 import (
 	/*"log"
 
-	"context"
+
 	"fmt"
 	"github.com/maffka123/gophermarktBonus/internal/app"
 
 	"github.com/maffka123/gophermarktBonus/internal/handlers"
-	"github.com/maffka123/gophermarktBonus/internal/storage"
-	"go.uber.org/zap"
+
+
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"*/
+	"context"
 	"fmt"
 	"github.com/maffka123/gophermarktBonus/internal/config"
+	"github.com/maffka123/gophermarktBonus/internal/storage"
+	"go.uber.org/zap"
 	"log"
 	"net/http"
 )
@@ -35,15 +38,16 @@ func main() {
 	}
 
 	logger.Info("initializing the service...")
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	_, err = storage.InitDB(ctx, cfg, logger)
+	if err != nil {
+		logger.Fatal("Error initializing db", zap.Error(err))
+	}
+	fmt.Println("db ready")
 	/*
-		ctx, cancel := context.WithCancel(context.Background())
-		defer cancel()
-
-		db, err := storage.InitDB(ctx, cfg, logger)
-		if err != nil {
-			logger.Fatal("Error initializing db", zap.Error(err))
-		}
-
 		r := handlers.BonusRouter(ctx, db, cfg.Key, logger)
 
 		srv := &http.Server{Addr: cfg.Endpoint, Handler: r}
