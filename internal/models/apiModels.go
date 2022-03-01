@@ -181,17 +181,15 @@ func (o *Order) UnmarshalJSON(data []byte) error {
 
 func (u *AccrualOrder) UnmarshalJSON(data []byte) error {
 	type newU struct {
-		ID     string `json:"order"`
-		Status string `json:"status"`
-		Amount int64  `json:"accrual"`
+		ID     string  `json:"order"`
+		Status string  `json:"status"`
+		Amount float64 `json:"accrual"`
 	}
 	nu := newU{}
 
 	if err := json.Unmarshal(data, &nu); err != nil {
 		return err
 	}
-
-	return fmt.Errorf(fmt.Sprint(nu))
 
 	s, err := strconv.Atoi(nu.ID)
 	if err != nil {
