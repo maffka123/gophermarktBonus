@@ -86,7 +86,7 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 		decoder := json.NewDecoder(response.Body)
 		decoder.Decode(&intermOrder)
 		responseData, _ := ioutil.ReadAll(response.Body)
-		logger.Debug(response.Status)
+		logger.Debug(fmt.Sprint(response.Header))
 		logger.Debug("answer from accural" + fmt.Sprint(responseData))
 
 		oout <- models.Order{ID: intermOrder.ID, Amount: intermOrder.Amount, Status: intermOrder.Status}
