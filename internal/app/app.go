@@ -63,7 +63,7 @@ func UpdateStatus(ctx context.Context, t <-chan time.Time, logger *zap.Logger, d
 }
 
 func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order, oout chan models.Order, logger *zap.Logger, client *http.Client) {
-	url := fmt.Sprintf("http://%s/api/orders/", cfg.AccrualSystem)
+	url := fmt.Sprintf("%s/api/orders/", cfg.AccrualSystem)
 	var intermOrder models.AccrualOrder
 	orders := <-oin
 

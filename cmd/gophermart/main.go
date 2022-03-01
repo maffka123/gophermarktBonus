@@ -57,7 +57,7 @@ func main() {
 		}
 	}()
 
-	statusTicker := time.NewTicker(time.Duration(5) * time.Second)
+	statusTicker := time.NewTicker(time.Duration(10) * time.Second)
 	go app.UpdateStatus(ctx, statusTicker.C, logger, db, cfg)
 
 	logger.Info("Start serving on", zap.String("endpoint name", cfg.Endpoint))
