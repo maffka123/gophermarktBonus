@@ -355,7 +355,7 @@ func newFakeDB() *fakeDB {
 	return &fakeDB{}
 }
 
-func (db *fakeDB) CreateNewUser(ctx context.Context, user models.User) (int, error) {
+func (db *fakeDB) CreateNewUser(ctx context.Context, user *models.User) (int, error) {
 	if user.Login == "error" {
 		return -1, fmt.Errorf("user already exists")
 	}

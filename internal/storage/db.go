@@ -26,7 +26,7 @@ type PGinterface interface {
 }
 
 type DBinterface interface {
-	CreateNewUser(context.Context, models.User) (int, error)
+	CreateNewUser(context.Context, *models.User) (int, error)
 	SelectPass(context.Context, *models.User) (*string, error)
 	SelectBalance(context.Context, int64) (*models.Balance, error)
 	SelectUserForOrder(context.Context, models.Order) (int64, error)
@@ -81,10 +81,10 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp stri
 	return &db, nil
 }
 
-func (db *PGDB) CreateNewUser(ctx context.Context, user models.User) (int, error) {
+func (db *PGDB) CreateNewUser(ctx context.Context, user *models.User) (int, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
-	_, err := db.Conn.Exec(ctx, `INSERT INTO users (login, password) VALUES($1,$2) RETURNING id;`, user.Login, user.Password)
+	err := db.Conn.QueryRow(ctx, `INSERT INTO users (login, password) VALUES($1,$2) RETURNING id;`, user.Login, user.Password).Scan(&user.ID)
 
 	if pgerr, ok := err.(*pq.Error); ok {
 		return -1, fmt.Errorf("user already exists: %v", pgerr)

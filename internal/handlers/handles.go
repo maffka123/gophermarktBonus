@@ -43,7 +43,7 @@ func (h *Handler) HandlerPostRegister(tokenAuth *jwtauth.JWTAuth) http.HandlerFu
 			return
 		}
 
-		exists, err := h.db.CreateNewUser(h.ctx, u)
+		exists, err := h.db.CreateNewUser(h.ctx, &u)
 		if exists == -1 {
 			http.Error(w, fmt.Sprintf("409 - Login is already taken: %s", err), http.StatusConflict)
 			return
