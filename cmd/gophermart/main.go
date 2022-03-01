@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/maffka123/gophermarktBonus/internal/app"
-	"github.com/maffka123/gophermarktBonus/internal/config"
+
 	"github.com/maffka123/gophermarktBonus/internal/handlers"
 	"github.com/maffka123/gophermarktBonus/internal/storage"
 	"go.uber.org/zap"
@@ -16,17 +16,19 @@ import (
 	"syscall"
 	"time"*/
 	"fmt"
+	"github.com/maffka123/gophermarktBonus/internal/config"
 	"log"
 	"net/http"
 )
 
 func main() {
 	fmt.Print("starting...")
-	/*	cfg, err := config.InitConfig()
-		if err != nil {
-			log.Fatalf("can't load config: %v", err)
-		}
-
+	cfg, err := config.InitConfig()
+	if err != nil {
+		log.Fatalf("can't load config: %v", err)
+	}
+	fmt.Println(cfg)
+	/*
 		logger, err := config.InitLogger(cfg.Debug, cfg.AppName)
 		if err != nil {
 			log.Fatalf("can't initialize zap logger: %v", err)
@@ -67,6 +69,6 @@ func main() {
 
 	http.HandleFunc("/app/register", func(w http.ResponseWriter, req *http.Request) { fmt.Fprintf(w, "hello\n") })
 	log.Fatal(http.ListenAndServe(":8080", nil))
-	fmt.Print("done...")
+	fmt.Println("done...")
 
 }
