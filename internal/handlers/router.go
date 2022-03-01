@@ -25,7 +25,7 @@ func BonusRouter(ctx context.Context, db storage.DBinterface, secret string, log
 	//r.Use(jwtauth.Authenticator)
 
 	r.Route("/api/user/", func(r chi.Router) {
-		r.Post("/register", Conveyor(mh.HandlerPostRegister(), unpackGZIP, checkForJSON))
+		r.Post("/register", Conveyor(mh.HandlerPostRegister(tokenAuth), unpackGZIP, checkForJSON))
 		r.Post("/login", Conveyor(mh.HandlerPostLogin(tokenAuth), unpackGZIP, checkForJSON))
 		r.With(jwtauth.Authenticator).Post("/orders", Conveyor(mh.HandlerPostOrders(), unpackGZIP, checkForText))
 		r.Get("/orders", Conveyor(mh.HandlerGetOrders(), unpackGZIP, packGZIP))

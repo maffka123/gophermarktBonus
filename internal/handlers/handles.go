@@ -31,7 +31,7 @@ func NewHandler(ctx context.Context, db storage.DBinterface, logger *zap.Logger)
 	}
 }
 
-func (h *Handler) HandlerPostRegister() http.HandlerFunc {
+func (h *Handler) HandlerPostRegister(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		var u models.User
@@ -51,7 +51,14 @@ func (h *Handler) HandlerPostRegister() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("500 - Internal error: %s", err), http.StatusInternalServerError)
 			return
 		} else if exists == 1 {
-			h.logger.Debug("inserted new user: ", zap.String("login", u.Login))
+
+			_, tokenString, _ := tokenAuth.Encode(map[string]interface{}{"user_id": u.ID})
+
+			h.logger.Debug("logged in: ", zap.String("login", u.Login))
+			http.SetCookie(w, &http.Cookie{
+				Name:  "jwt",
+				Value: tokenString,
+			})
 			w.Header().Set("application-type", "text/plain")
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{"status":"ok}`))
