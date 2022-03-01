@@ -139,6 +139,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("409 - Order was used by diferent user: %s", err), http.StatusConflict)
 			return
 		} else if err != nil {
+			h.logger.Debug(err.Error())
 			http.Error(w, fmt.Sprintf("500 - Internal error: %s", err), http.StatusInternalServerError)
 			return
 		}
