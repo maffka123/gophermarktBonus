@@ -124,9 +124,11 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 
 		currUser, err := app.UserIDFromContext(r.Context())
 		if err != nil {
+			h.logger.Debug(err.Error())
 			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
 			return
 		}
+		h.logger.Debug("found user: ", zap.String("login", string(orderID)))
 
 		expectedUser, err := h.db.SelectUserForOrder(h.ctx, order)
 
@@ -136,6 +138,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			w.Write([]byte(`{"status":"ok}`))
 			return
 		} else if expectedUser != 0 && currUser != expectedUser {
+			h.logger.Debug(err.Error())
 			http.Error(w, fmt.Sprintf("409 - Order was used by diferent user: %s", err), http.StatusConflict)
 			return
 		} else if err != nil {
