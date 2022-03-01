@@ -193,10 +193,11 @@ func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 			return
 		}
 
-		h.logger.Debug("list of orders for user: ", zap.String("login", fmt.Sprint(currUser)))
+		h.logger.Debug(string(mJSON))
+		h.logger.Debug(fmt.Sprintf("list of orders for user: %d", currUser), zap.String("len", fmt.Sprint(len(orders))))
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(mJSON))
+		w.Write(mJSON)
 	}
 }
 
