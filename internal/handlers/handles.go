@@ -128,7 +128,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("400 - could not parse user id from token: %s", err), http.StatusBadRequest)
 			return
 		}
-		h.logger.Debug("found user: ", zap.String("login", string(orderID)))
+		h.logger.Debug("found user: ", zap.String("login", fmt.Sprint(currUser)))
 
 		expectedUser, err := h.db.SelectUserForOrder(h.ctx, order)
 		h.logger.Debug("found other user: ", zap.String("login", fmt.Sprint(expectedUser)))
