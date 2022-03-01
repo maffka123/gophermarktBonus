@@ -77,7 +77,8 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 			logger.Fatal("request creation failed", zap.Error(err))
 		}
 
-		response, requestErr := requestWithRetry(client, request, logger)
+		//response, requestErr := requestWithRetry(client, request, logger)
+		response, requestErr := client.Do(request)
 		if requestErr != nil {
 			logger.Error(requestErr.Error())
 		}
