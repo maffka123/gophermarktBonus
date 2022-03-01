@@ -28,12 +28,13 @@ func main() {
 		log.Fatalf("can't load config: %v", err)
 	}
 	fmt.Println(cfg)
-	/*
-		logger, err := config.InitLogger(cfg.Debug, cfg.AppName)
-		if err != nil {
-			log.Fatalf("can't initialize zap logger: %v", err)
-		}
 
+	_, err = config.InitLogger(cfg.Debug, cfg.AppName)
+	if err != nil {
+		log.Fatalf("can't initialize zap logger: %v", err)
+	}
+	fmt.Println("logger ready")
+	/*
 		logger.Info("initializing the service...")
 
 		ctx, cancel := context.WithCancel(context.Background())
