@@ -34,7 +34,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	db, err := storage.InitDB(ctx, cfg, logger)
+	bp := app.GetBasePath()
+	db, err := storage.InitDB(ctx, cfg, logger, bp)
 	if err != nil {
 		logger.Fatal("Error initializing db", zap.Error(err))
 	}

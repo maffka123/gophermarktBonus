@@ -12,6 +12,7 @@ import (
 	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -41,7 +42,7 @@ type PGDB struct {
 	log  *zap.Logger
 }
 
-func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger) (*PGDB, error) {
+func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp string) (*PGDB, error) {
 	db := PGDB{
 		path: cfg.DBpath,
 		log:  logger,
@@ -54,7 +55,7 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger) (*PGDB,
 	db.Conn = conn
 
 	db.log.Info("initializing db tables...")
-	file, err := ioutil.ReadFile("../../docker_db/db.sql")
+	file, err := ioutil.ReadFile(filepath.Join(bp, "/docker_db/db.sql"))
 	if err != nil {
 		return nil, fmt.Errorf("unable to read sql file: %v", err)
 	}

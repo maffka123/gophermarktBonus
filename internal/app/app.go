@@ -15,7 +15,14 @@ import (
 	"github.com/maffka123/gophermarktBonus/internal/storage"
 	"github.com/theplant/luhn"
 	"go.uber.org/zap"
+	"path"
+	"runtime"
 )
+
+func GetBasePath() string {
+	_, b, _, _ := runtime.Caller(0)
+	return path.Dir(path.Dir(path.Dir(b)))
+}
 
 func ComparePass(ctx context.Context, expected string, actual string) bool {
 	return (subtle.ConstantTimeCompare([]byte(expected), []byte(actual)) == 1)
