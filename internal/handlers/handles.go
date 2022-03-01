@@ -131,6 +131,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 		h.logger.Debug("found user: ", zap.String("login", string(orderID)))
 
 		expectedUser, err := h.db.SelectUserForOrder(h.ctx, order)
+		h.logger.Debug("found other user: ", zap.String("login", fmt.Sprint(expectedUser)))
 
 		if expectedUser != 0 && currUser == expectedUser {
 			w.Header().Set("application-type", "text/plain")
@@ -153,6 +154,7 @@ func (h *Handler) HandlerPostOrders() http.HandlerFunc {
 
 		err = h.db.InsertOrder(h.ctx, order)
 		if err != nil {
+			h.logger.Debug(err.Error())
 			http.Error(w, fmt.Sprintf("500 - Internal error: %s", err), http.StatusInternalServerError)
 			return
 		}
