@@ -70,6 +70,7 @@ func getAccrual(ctx context.Context, cfg *config.Config, oin chan []models.Order
 
 	for _, order := range orders {
 		url += fmt.Sprint(order.ID)
+		logger.Debug("Accural URL: " + url)
 		request, err := http.NewRequest(http.MethodGet, url, nil)
 
 		if err != nil {
