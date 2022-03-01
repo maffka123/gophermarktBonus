@@ -44,7 +44,7 @@ func main() {
 
 	_, err = storage.InitDB(ctx, cfg, logger)
 	if err != nil {
-		logger.Fatal("Error initializing db", zap.Error(err))
+		logger.Info("Error initializing db", zap.Error(err))
 	}
 	fmt.Println("db ready")
 	/*
