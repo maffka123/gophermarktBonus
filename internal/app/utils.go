@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"crypto/subtle"
-	"errors"
 	"fmt"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/theplant/luhn"
@@ -44,5 +43,5 @@ func UserIDFromContext(ctx context.Context) (int64, error) {
 		return int64(id), nil
 	}
 
-	return 0, errors.New(fmt.Sprintf("user_id could not be parsed a number: %v", uID["user_id"]))
+	return 0, fmt.Errorf("user_id could not be parsed a number: %v", uID["user_id"])
 }
