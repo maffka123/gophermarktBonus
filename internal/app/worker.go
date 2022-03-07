@@ -88,10 +88,10 @@ func (w *Worker) requestWithRetry(client *http.Client, request *http.Request) (*
 		response, requestErr = client.Do(request)
 		if requestErr != nil {
 			w.logger.Info("Retrying: " + requestErr.Error())
-		} else if response.StatusCode == 429 {
+		} else if response.StatusCode == http.StatusTooManyRequests {
 			w.logger.Info("Too many requests")
 			time.Sleep(30 * time.Second)
-		} else if response.StatusCode == 200 {
+		} else if response.StatusCode == http.StatusOK {
 			return response, nil
 		}
 		w.logger.Info("Retrying...")

@@ -82,7 +82,7 @@ func (h *Handler) HandlerPostLogin(tokenAuth *jwtauth.JWTAuth) http.HandlerFunc 
 
 		pass, err := h.db.SelectPass(h.ctx, &u)
 
-		if pass == nil || !app.ComparePass(h.ctx, *pass, u.Password) {
+		if pass == nil || !app.ComparePass(*pass, u.Password) {
 			http.Error(w, fmt.Sprintf("401 - user or password are wrong: %s", err), http.StatusUnauthorized)
 			return
 		} else if err != nil {
@@ -185,7 +185,6 @@ func (h *Handler) HandlerGetOrders() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("500 - internal server error: %s", err), http.StatusBadRequest)
 			return
 		} else if len(orders) == 0 {
-			w.Header().Set("application-type", "text/plain")
 			w.WriteHeader(http.StatusNoContent)
 			w.Write([]byte(`{"status":"ok}`))
 			return
@@ -303,7 +302,6 @@ func (h *Handler) HandlerGetWithdrawals() http.HandlerFunc {
 			http.Error(w, fmt.Sprintf("500 - internal server error: %s", err), http.StatusBadRequest)
 			return
 		} else if len(*orders) == 0 {
-			w.Header().Set("application-type", "text/plain")
 			w.WriteHeader(http.StatusNoContent)
 			w.Write([]byte(`{"status":"ok}`))
 			return

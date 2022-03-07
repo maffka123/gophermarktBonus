@@ -1,6 +1,6 @@
 # Gophermarkt Bonus App
 
-It ia aservice that allows to recieve Bonuses for orders
+It is a aservice that allows to recieve Bonuses for orders
 
 ## API endpoints
 
@@ -17,7 +17,6 @@ GET /api/user/balance — current balance and withdrawals
 POST /api/user/balance/withdraw — available bonus points
 
 GET /api/user/balance/withdrawals — all withdrawals
-
 
 ## Testing with cURL
 
@@ -37,7 +36,6 @@ GET /api/user/balance/withdrawals — all withdrawals
 
 `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -X GET http://localhost:8081/api/user/balance/withdrawals`
 
-
  `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/register`
 
    `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
@@ -48,14 +46,10 @@ GET /api/user/balance/withdrawals — all withdrawals
 
    `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -X GET http://localhost:8081/api/user/balance/withdrawals`
 
-
-
  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456758 -X POST http://localhost:8081/api/user/orders`
 
   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456766 -X POST http://localhost:8081/api/user/orders`
 
   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456774 -X POST http://localhost:8081/api/user/orders`
-
-
 
   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 162124202183 -X POST http://localhost:8081/api/user/orders`

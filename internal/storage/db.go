@@ -75,7 +75,9 @@ func InitDB(ctx context.Context, cfg *config.Config, logger *zap.Logger, bp stri
 			return nil, fmt.Errorf("failed executing sql: %v", err)
 		}
 	}
-	tx.Commit(ctx)
+	if err := tx.Commit(ctx); err != nil {
+		return nil, fmt.Errorf("commit failed: %v", err)
+	}
 	db.log.Info("db initialized succesfully")
 
 	return &db, nil
