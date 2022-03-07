@@ -1,25 +1,55 @@
-# go-musthave-diploma-tpl
+# Gophermarkt Bonus App
 
-Шаблон репозитория для индивидуального дипломного проекта курса "Самостоятельный Go-разработчик"
+It is a aservice that allows to recieve Bonuses for orders
 
-# Начало работы
+## API endpoints
 
-1. Склонируйте репозиторий в любую подходящую директорию на вашем компьютере
-2. В корне репозитория выполните команду `go mod init <name>` (где `<name>` - адрес вашего репозитория на Github без
-   префикса `https://`) для создания модуля
+POST /api/user/register — create user
 
-# Обновление шаблона
+POST /api/user/login — authenticate user
 
-Чтобы иметь возможность получать обновления автотестов и других частей шаблона выполните следующую команды:
+POST /api/user/orders — register new order
 
-```
-git remote add -m master template https://github.com/yandex-praktikum/go-musthave-diploma-tpl.git
-```
+GET /api/user/orders — return all orders
 
-Для обновления кода автотестов выполните команду:
+GET /api/user/balance — current balance and withdrawals
 
-```
-git fetch template && git checkout template/master .github
-```
+POST /api/user/balance/withdraw — available bonus points
 
-затем добавьте полученые изменения в свой репозиторий.
+GET /api/user/balance/withdrawals — all withdrawals
+
+## Testing with cURL
+
+ `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/register`
+
+  `curl -d '{"login":"test1","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
+
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 18 -X POST http://localhost:8081/api/user/orders`
+
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8081/api/user/orders`
+
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4"  -X GET http://localhost:8081/api/user/balance`
+
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":0.5}' -X POST http://localhost:8081/api/user/balance/withdraw`
+
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: application/json" -d '{"order":"1234566","sum":10000}' -X POST http://localhost:8081/api/user/balance/withdraw`
+
+`curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -X GET http://localhost:8081/api/user/balance/withdrawals`
+
+ `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/register`
+
+   `curl -d '{"login":"test2","password":"mypass"}' -H "Content-Type: application/json" -X POST http://localhost:8081/api/user/login`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -H "Content-Type: text/plain" -d 18 -X POST http://localhost:8081/api/user/orders`
+
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U"  -X GET http://localhost:8081/api/user/orders`
+
+   `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyfQ.XUjieZQLFHd61t9ZjifbQ6c1BGB6ANYD1Xo-aog249U" -X GET http://localhost:8081/api/user/balance/withdrawals`
+
+ `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456758 -X POST http://localhost:8081/api/user/orders`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456766 -X POST http://localhost:8081/api/user/orders`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 123456774 -X POST http://localhost:8081/api/user/orders`
+
+  `curl -v --cookie "jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxfQ.uwbhqVZMHjeX9nvVpbw-AHXZ2YAfNToBR1IGjITmxo4" -H "Content-Type: text/plain" -d 162124202183 -X POST http://localhost:8081/api/user/orders`
